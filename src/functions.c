@@ -3,7 +3,6 @@
 void create_task()
 {   
     FILE *Task_file = fopen("task.txt", "w");
-    char line[100];
     if (Task_file == NULL) {
         printf("Не удалось открыть файл для чтения.\n");
         exit(1);
@@ -30,7 +29,7 @@ void create_task()
 
     printf("Введите статус: ");
     scanf("%s", teg);
-
+    
     fprintf(Task_file, "Task {\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", name, teg, date, deadline, description);
     
 }

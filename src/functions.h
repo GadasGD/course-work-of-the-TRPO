@@ -1,4 +1,5 @@
 #ifndef FUNC
+#define FUNC
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>

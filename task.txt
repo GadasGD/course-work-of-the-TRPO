@@ -1,10 +1,9 @@
 Task {
-Name: Сходить за покупками;
-Teg: срочно;
-Date created: 11.11.2011;
-Deadline: 21.11.2011;
-Daily: false;
-Description: Купить 1 - яйца
-2 - молоко
-3 - хлеб;
+Name: asdas;
+Teg: da;
+Date created: sd;
+Deadline: as;
+Dayly: false;
+Description: asda;
 }
+ 

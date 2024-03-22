@@ -24,9 +24,11 @@ int main()
             break;
         case 4:
             delete_task();
+            break;
         case 5:
             exit(0);
         }
+
     } while (true);
     
     return 0;
