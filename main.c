@@ -1,27 +1,20 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
+#include "functions.h"
 
 
-void printlist();
-void submit_task();
-void delete_task();
-void check_task();
 
 int main()
 {
     do
     {   
         int choice;
-        printlist();
-        printf("-----------------------------------\n1 - внести новую задачу\n2 - удалить задачу\n3 - отметить как выполненное\n4 - выход\n-----------------------------------\n");
+        print_list();
+        printf("-----------------------------------\n1 - создать новую задачу\n2 - посмотреть задачу\n3 - отметить как выполненное\n4 - удалить задачу\n5 - выйти\n-----------------------------------\n");
         printf("Введите номер действия: ");
         scanf("%d", &choice);
         switch (choice)
         {
         case 1:
-            submit_task();
+            create_task();
             break;
         case 2:
             delete_task();
@@ -30,6 +23,8 @@ int main()
             check_task();
             break;
         case 4:
+            delete_task();
+        case 5:
             exit(0);
         }
     } while (true);
@@ -37,22 +32,3 @@ int main()
     return 0;
 }
 
-void printlist()
-{
-    printf("Pass\n");
-}
-
-void submit_task()
-{
-    printf("Pass\n");
-}
-
-void delete_task()
-{
-    printf("Pass\n");
-}
-
-void check_task()
-{
-    printf("Pass\n");
-}
