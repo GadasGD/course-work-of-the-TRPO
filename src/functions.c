@@ -39,8 +39,6 @@ void print_list()
     printf("-----------------------------------\nЗадачи:\nСрочное:\n"); 
     int count_id = 1; //количество id заметок(количество заметок) 
     char teg[100];
-    char teg_sroch[100] = "Срочное;";
-    char teg_vagno[100] = "Важное;";
     char line[100];
     char name[100];
     while (fgets(line, sizeof(line), file) != NULL)
@@ -78,6 +76,24 @@ void print_list()
 
 void delete_task()
 {
+    FILE *file = fopen("task.txt", "wr");
+    if (file == NULL) {
+        printf("Не удалось открыть файл для чтения.\n");
+        exit(1);
+    }
+    char line[100];
+    int num_line = 1;
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        if(strcmp(line, "Task {") == 0) {
+            if (num_line < 8)
+            {
+                fputs("\n", file);
+                num_line++;
+            }
+        }
+    }
+    
     printf("Pass\n");
 }
 

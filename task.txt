@@ -1,9 +1,0 @@
-Task {
-Name: privet;
-Teg: Sroch;
-Date created: dasndl;
-Deadline: 1111;
-Dayly: false;
-Description: sfdsf;
-}
- 
