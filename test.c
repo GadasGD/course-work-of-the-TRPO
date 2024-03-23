@@ -1,38 +1,15 @@
-#include "functions.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
 
-void create_task()
-{   
-    FILE *Task_file = fopen("task.txt", "w");
-    if (Task_file == NULL) {
-        printf("Не удалось открыть файл для чтения.\n");
-        exit(1);
-    }
-
-    char name[100];
-    char description[1000];
-    char date[100];
-    char deadline[100];
-    char teg[100];
-    //int id;
-
-    printf("Введите название заметки: ");
-    scanf("%s", name);
-
-    printf("Введите описание заметки: ");
-    scanf("%s", description);
-
-    printf("Введите дату: ");
-    scanf("%s", date);
-
-    printf("Введите дэдлайн заметки: ");
-    scanf("%s", deadline);
-
-    printf("Введите статус: ");
-    scanf("%s", teg);
-    
-    fprintf(Task_file, "Task {\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", name, teg, date, deadline, description);
-    
+void print_list();
+int main(int argc, char const *argv[])
+{
+    print_list();
+    return 0;
 }
+
 void print_list()
 { 
     FILE *file = fopen("task.txt", "r"); 
@@ -73,15 +50,4 @@ void print_list()
     // } 
     printf("-----------------------------------\n"); 
     fclose(file); 
-}
-
-
-void delete_task()
-{
-    printf("Pass\n");
-}
-
-void check_task()
-{
-    printf("Pass\n");
 }

@@ -1,9 +1,9 @@
 Task {
-Name: asdas;
-Teg: da;
-Date created: sd;
-Deadline: as;
+Name: privet;
+Teg: Sroch;
+Date created: dasndl;
+Deadline: 1111;
 Dayly: false;
-Description: asda;
+Description: sfdsf;
 }
  
