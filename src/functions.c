@@ -7,13 +7,12 @@ void create_task()
         printf("Не удалось открыть файл для чтения.\n");
         exit(1);
     }
-
     char name[100];
     char description[1000];
     char date[100];
     char deadline[100];
     char teg[100];
-    //int id;
+    int id = 0;
 
     printf("Введите название заметки: ");
     scanf("%s", name);
@@ -30,7 +29,7 @@ void create_task()
     printf("Введите статус: ");
     scanf("%s", teg);
     
-    fprintf(Task_file, "Task {\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", name, teg, date, deadline, description);
+    fprintf(Task_file, "Task {\nId: %d\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, date, deadline, description);
     
 }
 void print_list()
