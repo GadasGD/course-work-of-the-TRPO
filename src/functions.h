@@ -11,6 +11,7 @@ void print_task(); // вывод конкретной заметки
 void delete_task(); // удаление заметки
 void check_task(); // просмотр заметки
 void complete_task(); // отметить задачу как выполненную  и удалить
+void print_menu(); // вывод меню
 
 
 #endif

@@ -1,9 +1,20 @@
 Task {
-Name: vffdv;
-Teg: k;
-Date created: h;
-Deadline: j;
+Id: 0
+Name: dsafads;
+Teg: Важное;
+Date created: fsadfsa;
+Deadline: dsad;
 Dayly: false;
-Description: kjhjfgu;
+Description: adsfasfsadf;
 }
  
+
+Task {
+Id: 1
+Name: dda;
+Teg: Важное;
+Date created: 1112;
+Deadline: sadsa;
+Dayly: false;
+Description: asdasda;
+}

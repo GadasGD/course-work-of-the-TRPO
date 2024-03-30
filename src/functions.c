@@ -100,3 +100,8 @@ void check_task()
 {
     printf("Pass\n");
 }
+
+void print_task()
+{
+    printf("Pass");
+}

@@ -3,56 +3,54 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-int get_variant(int count)
-{
-    int variant;
-    char s[100];
-    scanf("%s", s);
-
-    while (sscanf(s, "%d", &variant) != 1 || variant < 1 || variant > count)
-    {
-        printf("Неккоретный ввод\n");
-        printf("\n-----------------------------------\n1 - создать новую задачу\n2 "
-               "- посмотреть задачу\n3 - отметить как выполненное\n4 - удалить "
-               "задачу\n5 - выйти\n-----------------------------------\n");
-        printf("Введите номер действия: ");
-        scanf("%s", s);
+void print_list()
+{ 
+    FILE *file = fopen("task.txt", "r"); 
+    printf("-----------------------------------\nЗадачи:\nСрочное:\n"); 
+    int count_id = 1; //количество id заметок(количество заметок) 
+    char teg[100];
+    char line[100];
+    char name[100];
+    int id = 0;
+    while (fgets(line, sizeof(line), file) != NULL)
+    {   
+        sscanf(line, "Name: %s;", name);
+        sscanf(line, "Teg: %s;", teg);
+        if(line == "}\n")
+        {
+            break;
+        }
     }
-    return variant;
+    if (strcmp(teg, "Срочное;") == 0)
+    { 
+        for(int id_1 = 1; id_1 <= count_id; id_1++) 
+        { 
+            printf("%d - %s\n", id, name); 
+        } 
+    } 
+    printf("Важное:\n"); 
+    if (strcmp(teg, "Важное;") == 0)
+    { 
+        for(int id_1 = 1; id_1 <= count_id; id_1++) 
+        { 
+            printf("%d - %s\n", id, name); 
+        } 
+    } 
+    printf("Ежедневные дела:\n"); 
+    // if(teg == "Ежедневные дела") 
+    // { 
+    //     for(int id = 1; id <= count_id; id++) 
+    //     { 
+    //         printf("%d - %s\n", id, name); 
+    //     } 
+    // } 
+    printf("-----------------------------------\n"); 
+    fclose(file); 
 }
+
 int main()
 {
     int choice;
-    do
-    {
-        printf("\n-----------------------------------\n1 - создать новую задачу\n2 "
-               "- посмотреть задачу\n3 - отметить как выполненное\n4 - удалить "
-               "задачу\n5 - выйти\n-----------------------------------\n");
-        printf("Введите номер действия: ");
-
-        choice = get_variant(5);
-        switch (choice)
-        {
-        case 1:
-            printf("Pass");
-            break;
-        case 2:
-            printf("Pass");
-            break;
-        case 3:
-            printf("Pass");
-            break;
-        case 4:
-            printf("Pass");
-            break;
-        case 5:
-            exit(0);
-        default:
-            printf("Неверный выбор операции. Попробуйте снова.\n");
-            printf("\n");
-        }
-    } while (choice != 5);
-
+    print_list();
     return 0;
 }
