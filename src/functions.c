@@ -2,17 +2,29 @@
 
 void create_task()
 {   
-    FILE *Task_file = fopen("task.txt", "w");
+    FILE *Task_file = fopen("task.txt", "r+b");
     if (Task_file == NULL) {
         printf("Не удалось открыть файл для чтения.\n");
         exit(1);
     }
-    char name[100];
-    char description[1000];
-    char date[100];
-    char deadline[100];
-    char teg[100];
-    int id = 0;
+    char name[100] = {0};
+    char description[1000] = "";
+    char date[100] = "";
+    char deadline[100] = "";
+    char teg[100] = "";
+    char line[100] = "";
+    int id = 1;
+
+    while (fgets(line, sizeof(line), Task_file) != NULL)
+    {   
+        sscanf(line, "Id: %d;", &id);
+    }
+    id++;
+    
+    if(fgets(line, sizeof(line), Task_file) == NULL)
+    {
+        fprintf(Task_file, "\n");
+    }
 
     printf("Введите название заметки: ");
     scanf("%s", name);
@@ -26,10 +38,23 @@ void create_task()
     printf("Введите дэдлайн заметки: ");
     scanf("%s", deadline);
 
-    printf("Введите статус: ");
-    scanf("%s", teg);
-    
-    fprintf(Task_file, "Task {\nId: %d\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, date, deadline, description);
+    int choice = 0;
+    do{
+    printf("Введите статус: 1 - Срочно, 2 - важно\n");
+    scanf("%d", &choice);
+    switch (choice)
+    {
+    case 1:
+        strcpy(teg, "Срочно");
+        break;
+    case 2:
+        strcpy(teg, "Важно");
+        break;
+    default:
+        printf("Неверный выбор, попробуите снова\n");
+    }
+    }while(choice != 1 && choice != 2);
+    fprintf(Task_file, "Task {\nId: %d;\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, date, deadline, description);
     
 }
 void print_list()
