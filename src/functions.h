@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 void create_task(); // создание заметки
 void print_list(); // вывод заметок в главном экране

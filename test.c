@@ -7,13 +7,14 @@ void print_task();
 void print_menu();
 int get_variant(int count);
 void create_task()
-{   
+{
     FILE *Task_file = fopen("task.txt", "r+b");
-    if (Task_file == NULL) {
+    if (Task_file == NULL)
+    {
         printf("Не удалось открыть файл для чтения.\n");
         exit(1);
     }
-    char name[100] = {0};
+    char name[100] = "";
     char description[1000] = "";
     char date[100] = "";
     char deadline[100] = "";
@@ -22,46 +23,46 @@ void create_task()
     int id = 1;
 
     while (fgets(line, sizeof(line), Task_file) != NULL)
-    {   
+    {
         sscanf(line, "Id: %d;", &id);
     }
     id++;
-    
-    if(fgets(line, sizeof(line), Task_file) == NULL)
+
+    if (fgets(line, sizeof(line), Task_file) == NULL)
     {
         fprintf(Task_file, "\n");
     }
-
+    getchar();
     printf("Введите название заметки: ");
-    scanf("%s", name);
+    fgets(name, sizeof(name), stdin);
 
-    printf("Введите описание заметки: ");
-    scanf("%s", description);
+    printf("Введите содержание заметки: ");
+    fgets(description, sizeof(description), stdin);
 
-    printf("Введите дату: ");
+    printf("Введите дату создания заметки: ");
     scanf("%s", date);
-
-    printf("Введите дэдлайн заметки: ");
-    scanf("%s", deadline);
-
-    int choice = 0;
-    do{
-    printf("Введите статус: 1 - Срочно, 2 - важно\n");
-    scanf("%d", &choice);
-    switch (choice)
-    {
-    case 1:
-        strcpy(teg, "Срочно");
-        break;
-    case 2:
-        strcpy(teg, "Важно");
-        break;
-    default:
-        printf("Неверный выбор, попробуите снова\n");
-    }
-    }while(choice != 1 && choice != 2);
-    fprintf(Task_file, "Task {\nId: %d;\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, date, deadline, description);
     
+    printf("Введите крайний срок выполнения заметки: ");
+    scanf("%s", deadline);
+    getchar();
+    int choice = 0;
+    do
+    {
+        printf("Введите статус: 1 - Срочно, 2 - Важно\n");
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1:
+            strcpy(teg, "Срочно");
+            break;
+        case 2:
+            strcpy(teg, "Важно");
+            break;
+        default:
+            printf("Неверный выбор, попробуите снова\n");
+        }
+    } while (choice != 1 && choice != 2);
+    fprintf(Task_file, "Task {\nId: %d;\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, date, deadline, description);
 }
 
 
