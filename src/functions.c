@@ -62,24 +62,24 @@ void print_list()
 {
     FILE *file = fopen("task.txt", "r");
     printf("-----------------------------------\nЗадачи:\nСрочное:\n");
-    int id;
+    char id[100];
     int count_id = 0;
     char teg[100];
     char line[100];
     char name[100];
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        sscanf(line, "Id: %d;", id);
+        sscanf(line, "Id: %s;", id);
         sscanf(line, "Name: %s;", name);
         sscanf(line, "Teg: %s;", teg);
         count_id++;
     }
-
-    for (; id <= count_id; id++)
+    int id_d = id - '0';
+    for (; id_d <= count_id; id_d++)
     {
         if (teg == "Срочно;")
         {
-            printf("%d - %s\n", id, name);
+            printf("%d - %s\n", id_d, name);
         }
     }
     printf("Важно:\n");
@@ -135,7 +135,7 @@ void check_task()
 void print_task()
 {
     int id_task;
-    int id;
+    char id[100];
     char line[100];
     char name[100] = {0};
     char description[1000];
@@ -144,12 +144,13 @@ void print_task()
     char teg[100];
     char dayly[100];
     printf("Введите номер нужной заметки: ");
-    scanf("%d", id_task);
+    scanf("%d", &id_task);
     FILE *file = fopen("task.txt", "r");
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        sscanf(line, "Id: %d;", id);
-        if (id == id_task)
+        sscanf(line, "Id: %s;", id);
+        int id_d = id - '0';
+        if (id_d == id_task)
         {
             while (fgets(line, sizeof(line), file) != NULL)
             {
