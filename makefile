@@ -1,5 +1,5 @@
 TARGET = main
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall 
 
 SRC = $(wildcard $(PREF_SRC)*.c)
 OBJ = $(patsubst $(PREF_SRC)%.c, $(PREF_OBJ)%.o, $(SRC))

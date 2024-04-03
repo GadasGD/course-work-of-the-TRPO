@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 void print_list();
-
+void print_task();
 void print_menu();
 int get_variant(int count);
 void create_task()
@@ -98,7 +98,7 @@ int main()
             create_task();
             break;
         case 2:
-            create_task();
+            print_task();
             break;
         case 3:
             create_task();
@@ -158,12 +158,13 @@ void print_list()
                     printf("%c", name[i]);
                 }
             }
-            printf("\n");
             strcpy(teg, "");
         }
     }
     fseek(file, 0, SEEK_SET);
     printf("Важно:\n");
+    id = 1;
+    strcpy(teg, "");
     while (fgets(line, sizeof(line), file) != NULL)
     {
         sscanf(line, "Id: %d;", &id);
@@ -173,7 +174,6 @@ void print_list()
             fseek(file, -strlen(line), SEEK_CUR);
             fgets(name, sizeof(line), file);
         }
-        sscanf(line, "Teg: %s;", teg);
         sscanf(line, "Teg: %s;", teg);
         if (strcmp(teg, "Важно;") == 0)
         {
@@ -185,19 +185,100 @@ void print_list()
                     printf("%c", name[i]);
                 }
             }
-            //printf("\n");
             strcpy(teg, "");
         }
     }
-    
+    fseek(file, 0, SEEK_SET);
     printf("Другое:\n");
-    // if(teg == "Ежедневные дела")
-    // {
-    //     for(int id = 1; id <= count_id; id++)
-    //     {
-    //         printf("%d - %s\n", id, name);
-    //     }
-    // }
+    id = 1;
+    strcpy(teg, "");
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &id);
+        if(sscanf(line, "Name: %s", name))
+        {   
+            strcpy(name, "");
+            fseek(file, -strlen(line), SEEK_CUR);
+            fgets(name, sizeof(line), file);
+        }
+        sscanf(line, "Teg: %s;", teg);
+        sscanf(line, "Teg: %s;", teg);
+        if (strcmp(teg, "Другое;") == 0)
+        {
+            printf("%d - ", id);
+            for (int i = 0; i < strlen(name); i++)
+            {   
+                if (i > 5)
+                {
+                    printf("%c", name[i]);
+                }
+            }
+            strcpy(teg, "");
+        }
+    }
     printf("-----------------------------------\n");
+    fclose(file);
+}
+void print_task()
+{
+    int id_task;
+    int id = 0;
+    int max_id = 0;
+    char line[100];
+    char name[100] = {0};
+    char description[1000];
+    char date[100];
+    char deadline[100];
+    char teg[100];
+    char dayly[100];
+    FILE *file = fopen("task.txt", "r");
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &max_id);
+    }
+    fseek(file, 0, SEEK_SET);
+
+    printf("Введите номер нужной заметки: ");
+    scanf("%d", &id_task);
+    if(id_task > max_id && id_task < 1)
+    {
+        printf("Заметка не найдена");
+        return;
+    }
+
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &id);
+        if (id == id_task)
+        {
+            int count = 0;
+            while ((fgets(line, sizeof(line), file) != NULL) && count < 7)
+            {
+                sscanf(line, "Name: %s;", name);
+                sscanf(line, "Teg: %s;", teg);
+                sscanf(line, "Date created: %s;", date);
+                sscanf(line, "Deadline: %s;", deadline);
+                sscanf(line, "Dayly: %s;", dayly);
+                sscanf(line, "Description: %s;", description);
+                count++;
+            }
+            printf("-----------------------------------\n");
+            printf("Название заметки: %s\n", name);
+            printf("Тег: %s\n", teg);
+            printf("Дата создания: %s\n", date);
+            if (deadline != 0)
+            {
+                    printf("Крайний срок выполнения: %s\n", deadline);
+            }
+            if (strcmp(dayly, "true;") == 0)
+            {
+                    printf("Ежедневно");
+            }
+            printf("Содержание: %s\n", description);
+            printf("-----------------------------------\n");
+            scanf("%d", &id);
+            break;
+        }
+    } 
     fclose(file);
 }

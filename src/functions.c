@@ -8,7 +8,7 @@ void create_task()
         printf("Не удалось открыть файл для чтения.\n");
         exit(1);
     }
-    char name[100] = {0};
+    char name[100] = "";
     char description[1000] = "";
     char date[100] = "";
     char deadline[100] = "";
@@ -71,36 +71,85 @@ void print_list()
     {
         sscanf(line, "Id: %d;", &max_id);
     }
+    fseek(file, 0, SEEK_SET);
     while (fgets(line, sizeof(line), file) != NULL)
     {
         sscanf(line, "Id: %d;", &id);
-        sscanf(line, "Name: %s;", name);
+        if(sscanf(line, "Name: %s", name))
+        {   
+            strcpy(name, "");
+            fseek(file, -strlen(line), SEEK_CUR);
+            fgets(name, sizeof(line), file);
+        }
         sscanf(line, "Teg: %s;", teg);
         if (strcmp(teg, "Срочно;") == 0)
         {
-            printf("%d - %s\n", id, name);
+            printf("%d - ", id);
+            for (size_t i = 0; i < strlen(name); i++)
+            {   
+                if (i > 5)
+                {
+                    printf("%c", name[i]);
+                }
+            }
+            strcpy(teg, "");
         }
     }
+    fseek(file, 0, SEEK_SET);
     printf("Важно:\n");
-     while (fgets(line, sizeof(line), file) != NULL)
+    id = 1;
+    strcpy(teg, "");
+    while (fgets(line, sizeof(line), file) != NULL)
     {
         sscanf(line, "Id: %d;", &id);
-        sscanf(line, "Name: %s;", name);
+        if(sscanf(line, "Name: %s", name))
+        {   
+            strcpy(name, "");
+            fseek(file, -strlen(line), SEEK_CUR);
+            fgets(name, sizeof(line), file);
+        }
         sscanf(line, "Teg: %s;", teg);
         if (strcmp(teg, "Важно;") == 0)
         {
-            printf("%d - %s\n", id, name);
+            printf("%d - ", id);
+            for (size_t i = 0; i < strlen(name); i++)
+            {   
+                if (i > 5)
+                {
+                    printf("%c", name[i]);
+                }
+            }
+            strcpy(teg, "");
         }
     }
-    
+    fseek(file, 0, SEEK_SET);
     printf("Другое:\n");
-    // if(teg == "Ежедневные дела")
-    // {
-    //     for(int id = 1; id <= count_id; id++)
-    //     {
-    //         printf("%d - %s\n", id, name);
-    //     }
-    // }
+    id = 1;
+    strcpy(teg, "");
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &id);
+        if(sscanf(line, "Name: %s", name))
+        {   
+            strcpy(name, "");
+            fseek(file, -strlen(line), SEEK_CUR);
+            fgets(name, sizeof(line), file);
+        }
+        sscanf(line, "Teg: %s;", teg);
+        sscanf(line, "Teg: %s;", teg);
+        if (strcmp(teg, "Другое;") == 0)
+        {
+            printf("%d - ", id);
+            for (size_t i = 0; i < strlen(name); i++)
+            {   
+                if (i > 5)
+                {
+                    printf("%c", name[i]);
+                }
+            }
+            strcpy(teg, "");
+        }
+    }
     printf("-----------------------------------\n");
     fclose(file);
 }
@@ -139,29 +188,44 @@ void print_task()
 {
     int id_task;
     int id = 0;
-    char line[100];
-    char name[100] = {0};
-    char description[1000];
-    char date[100];
-    char deadline[100];
-    char teg[100];
-    char dayly[100];
+    int max_id = 0;
+    char name[100] = "";
+    char description[1000] = "";
+    char date[100] = "";
+    char deadline[100] = "";
+    char teg[100] = "";
+    char line[100] = "";
+    char dayly[100] = "";
+    FILE *file = fopen("task.txt", "r");
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &max_id);
+    }
+    fseek(file, 0, SEEK_SET);
+
     printf("Введите номер нужной заметки: ");
     scanf("%d", &id_task);
-    FILE *file = fopen("task.txt", "r");
+    if(id_task > max_id && id_task < 1)
+    {
+        printf("Заметка не найдена");
+        return;
+    }
+
     while (fgets(line, sizeof(line), file) != NULL)
     {
         sscanf(line, "Id: %d;", &id);
         if (id == id_task)
         {
-            while (fgets(line, sizeof(line), file) != NULL)
+            int count = 0;
+            while ((fgets(line, sizeof(line), file) != NULL) && count < 7)
             {
                 sscanf(line, "Name: %s;", name);
                 sscanf(line, "Teg: %s;", teg);
-                sscanf(line, "Date create: %s;", date);
+                sscanf(line, "Date created: %s;", date);
                 sscanf(line, "Deadline: %s;", deadline);
                 sscanf(line, "Dayly: %s;", dayly);
                 sscanf(line, "Description: %s;", description);
+                count++;
             }
             printf("-----------------------------------\n");
             printf("Название заметки: %s\n", name);
@@ -177,7 +241,9 @@ void print_task()
             }
             printf("Содержание: %s\n", description);
             printf("-----------------------------------\n");
+            scanf("%d", &id);
             break;
         }
     } 
+    fclose(file);
 }

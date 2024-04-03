@@ -31,7 +31,7 @@ Description: Посадить яблоню на участке;
 Task {
 Id: 4;
 Name: gfdgs;
-Teg: adsfasdf;
+Teg: Другое;
 Date created: fasdfa;
 Deadline: asdfa;
 Dayly: false;
@@ -41,7 +41,7 @@ Description: sadfa;
 Task {
 Id: 5;
 Name: Матан;
-Teg: ;
+Teg: Другое;
 Date created: завтра;
 Deadline: сегодня;
 Dayly: false;
