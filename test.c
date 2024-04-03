@@ -2,55 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+void print_list();
 
 void print_menu();
 int get_variant(int count);
-
-void print_list()
-{ 
-    FILE *file = fopen("task.txt", "r"); 
-    printf("-----------------------------------\nЗадачи:\nСрочное:\n"); 
-    int count_id = 1; //количество id заметок(количество заметок) 
-    char teg[100];
-    char line[100];
-    char name[100];
-    int id = 0;
-    while (fgets(line, sizeof(line), file) != NULL)
-    {   
-        sscanf(line, "Name: %s;", name);
-        sscanf(line, "Teg: %s;", teg);
-        if(strcmp(line, "}\n"))
-        {
-            break;
-        }
-    }
-    if (strcmp(teg, "Срочное;") == 0)
-    { 
-        for(int id_1 = 1; id_1 <= count_id; id_1++) 
-        { 
-            printf("%d - %s\n", id, name); 
-        } 
-    } 
-    printf("Важное:\n"); 
-    if (strcmp(teg, "Важное;") == 0)
-    { 
-        for(int id_1 = 1; id_1 <= count_id; id_1++) 
-        { 
-            printf("%d - %s\n", id, name); 
-        } 
-    } 
-    printf("Ежедневные дела:\n"); 
-    // if(teg == "Ежедневные дела") 
-    // { 
-    //     for(int id = 1; id <= count_id; id++) 
-    //     { 
-    //         printf("%d - %s\n", id, name); 
-    //     } 
-    // } 
-    printf("-----------------------------------\n"); 
-    fclose(file); 
-}
 void create_task()
 {   
     FILE *Task_file = fopen("task.txt", "r+b");
@@ -108,6 +63,7 @@ void create_task()
     fprintf(Task_file, "Task {\nId: %d;\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, date, deadline, description);
     
 }
+
 
 int get_variant(int count)
 {
@@ -167,4 +123,57 @@ void print_menu()
                "- посмотреть задачу\n3 - отметить как выполненное\n4 - удалить "
                "задачу\n5 - выйти\n-----------------------------------\n");
     printf("Введите номер действия: ");  
+}
+void print_list()
+{
+    FILE *file = fopen("task.txt", "r");
+    printf("-----------------------------------\nЗадачи:\nСрочное:\n");
+    int id = 0;
+    int max_id = 0;
+    char teg[100] = "";
+    char line[100] = "";
+    char name[100] = "";
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &max_id);
+    }
+    fseek(file, 0, SEEK_SET);
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &id);
+        if(sscanf(line, "Name: %s;", name) == 1)
+        {
+            fputs(name, file);
+        }
+        sscanf(line, "Teg: %s;", teg);
+        if (strcmp(teg, "Срочно;") == 0)
+        {
+            printf("%d - %s\n", id, name);
+            strcpy(teg, "");
+        }
+    }
+    fseek(file, 0, SEEK_SET);
+    printf("Важно:\n");
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &id);
+        sscanf(line, "Name: %s;", name);
+        sscanf(line, "Teg: %s;", teg);
+        if (strcmp(teg, "Важно;") == 0)
+        {
+            printf("%d - %s\n", id, name);
+            strcpy(teg, "");
+        }
+    }
+    
+    printf("Другое:\n");
+    // if(teg == "Ежедневные дела")
+    // {
+    //     for(int id = 1; id <= count_id; id++)
+    //     {
+    //         printf("%d - %s\n", id, name);
+    //     }
+    // }
+    printf("-----------------------------------\n");
+    fclose(file);
 }

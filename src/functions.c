@@ -30,19 +30,19 @@ void create_task()
     printf("Введите название заметки: ");
     scanf("%s", name);
 
-    printf("Введите описание заметки: ");
+    printf("Введите содержание заметки: ");
     scanf("%s", description);
 
-    printf("Введите дату: ");
+    printf("Введите дату создания заметки: ");
     scanf("%s", date);
 
-    printf("Введите дэдлайн заметки: ");
+    printf("Введите крайний срок выполнения заметки: ");
     scanf("%s", deadline);
 
     int choice = 0;
     do
     {
-        printf("Введите статус: 1 - Срочно, 2 - важно\n");
+        printf("Введите статус: 1 - Срочно, 2 - Важно\n");
         scanf("%d", &choice);
         switch (choice)
         {
@@ -62,35 +62,38 @@ void print_list()
 {
     FILE *file = fopen("task.txt", "r");
     printf("-----------------------------------\nЗадачи:\nСрочное:\n");
-    char id[100];
-    int count_id = 0;
-    char teg[100];
-    char line[100];
-    char name[100];
+    int id = 0;
+    int max_id = 0;
+    char teg[100] = "";
+    char line[100] = "";
+    char name[100] = "";
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        sscanf(line, "Id: %s;", id);
+        sscanf(line, "Id: %d;", &max_id);
+    }
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &id);
         sscanf(line, "Name: %s;", name);
         sscanf(line, "Teg: %s;", teg);
-        count_id++;
-    }
-    int id_d = id - '0';
-    for (; id_d <= count_id; id_d++)
-    {
-        if (teg == "Срочно;")
-        {
-            printf("%d - %s\n", id_d, name);
-        }
-    }
-    printf("Важно:\n");
-    if (strcmp(teg, "Важно;") == 0)
-    {
-        for (int id = 1; id <= count_id; id++)
+        if (strcmp(teg, "Срочно;") == 0)
         {
             printf("%d - %s\n", id, name);
         }
     }
-    printf("Ежедневные дела:\n");
+    printf("Важно:\n");
+     while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &id);
+        sscanf(line, "Name: %s;", name);
+        sscanf(line, "Teg: %s;", teg);
+        if (strcmp(teg, "Важно;") == 0)
+        {
+            printf("%d - %s\n", id, name);
+        }
+    }
+    
+    printf("Другое:\n");
     // if(teg == "Ежедневные дела")
     // {
     //     for(int id = 1; id <= count_id; id++)
@@ -135,7 +138,7 @@ void check_task()
 void print_task()
 {
     int id_task;
-    char id[100];
+    int id = 0;
     char line[100];
     char name[100] = {0};
     char description[1000];
@@ -148,9 +151,8 @@ void print_task()
     FILE *file = fopen("task.txt", "r");
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        sscanf(line, "Id: %s;", id);
-        int id_d = id - '0';
-        if (id_d == id_task)
+        sscanf(line, "Id: %d;", &id);
+        if (id == id_task)
         {
             while (fgets(line, sizeof(line), file) != NULL)
             {
@@ -165,10 +167,13 @@ void print_task()
             printf("Название заметки: %s\n", name);
             printf("Тег: %s\n", teg);
             printf("Дата создания: %s\n", date);
-            printf("Крайний срок выполнения: %s\n", deadline);
-            if (dayly == "true")
+            if (deadline != 0)
             {
-                printf("Ежедневность: %s\n", dayly);
+                    printf("Крайний срок выполнения: %s\n", deadline);
+            }
+            if (strcmp(dayly, "true;") == 0)
+            {
+                    printf("Ежедневно");
             }
             printf("Содержание: %s\n", description);
             printf("-----------------------------------\n");
