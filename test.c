@@ -141,14 +141,24 @@ void print_list()
     while (fgets(line, sizeof(line), file) != NULL)
     {
         sscanf(line, "Id: %d;", &id);
-        if(sscanf(line, "Name: %s;", name) == 1)
-        {
-            fputs(name, file);
+        if(sscanf(line, "Name: %s", name))
+        {   
+            strcpy(name, "");
+            fseek(file, -strlen(line), SEEK_CUR);
+            fgets(name, sizeof(line), file);
         }
         sscanf(line, "Teg: %s;", teg);
         if (strcmp(teg, "Срочно;") == 0)
         {
-            printf("%d - %s\n", id, name);
+            printf("%d - ", id);
+            for (int i = 0; i < strlen(name); i++)
+            {   
+                if (i > 5)
+                {
+                    printf("%c", name[i]);
+                }
+            }
+            printf("\n");
             strcpy(teg, "");
         }
     }
@@ -157,11 +167,25 @@ void print_list()
     while (fgets(line, sizeof(line), file) != NULL)
     {
         sscanf(line, "Id: %d;", &id);
-        sscanf(line, "Name: %s;", name);
+        if(sscanf(line, "Name: %s", name))
+        {   
+            strcpy(name, "");
+            fseek(file, -strlen(line), SEEK_CUR);
+            fgets(name, sizeof(line), file);
+        }
+        sscanf(line, "Teg: %s;", teg);
         sscanf(line, "Teg: %s;", teg);
         if (strcmp(teg, "Важно;") == 0)
         {
-            printf("%d - %s\n", id, name);
+            printf("%d - ", id);
+            for (int i = 0; i < strlen(name); i++)
+            {   
+                if (i > 5)
+                {
+                    printf("%c", name[i]);
+                }
+            }
+            //printf("\n");
             strcpy(teg, "");
         }
     }
