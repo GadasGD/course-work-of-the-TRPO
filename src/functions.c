@@ -1,4 +1,7 @@
 #include "functions.h"
+#include <regex.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 void create_task()
 {
@@ -37,26 +40,31 @@ void create_task()
     printf("Введите крайний срок выполнения заметки: ");
     scanf("%s", deadline);
     getchar();
-    int choice = 0;
+    int choice;
     do
     {
         printf("Введите статус: 1 - Срочно, 2 - Важно, 3 - Другое\n");
-        scanf("%d", &choice);
+        choice = getchar();
+        if (choice == '\n')
+        {
+            choice = getchar();
+        }
         switch (choice)
         {
-        case 1:
+        case '1':
             strcpy(teg, "Срочно");
             break;
-        case 2:
+        case '2':
             strcpy(teg, "Важно");
             break;
-        case 3:
+        case '3':
             strcpy(teg, "Другое");
             break;
         default:
             printf("Неверный выбор, попробуите снова\n");
+            break;
         }
-    } while (choice != 1 && choice != 2 && choice != 3);
+    } while (choice != '1' && choice != '2' && choice != '3');
     fprintf(Task_file, "Task {\nId: %d;\nName: %s;\nTeg: %s;\nDate created: %d.%d.%d;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, now->tm_mday, now->tm_mon + 1, now->tm_year + 1900, deadline, description);
     fclose(Task_file);
 }
