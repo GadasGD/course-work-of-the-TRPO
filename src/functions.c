@@ -1,4 +1,7 @@
 #include "functions.h"
+#include <regex.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 void create_task()
 {
@@ -10,7 +13,8 @@ void create_task()
     }
     char name[100] = "";
     char description[1000] = "";
-    char date[100] = "";
+    time_t date = time(NULL);
+    struct tm *now = localtime(&date);
     char deadline[100] = "";
     char teg[100] = "";
     char line[100] = "";
@@ -26,37 +30,43 @@ void create_task()
     {
         fprintf(Task_file, "\n");
     }
-
+    getchar();
     printf("Введите название заметки: ");
-    scanf("%s", name);
+    fgets(name, sizeof(name), stdin);
 
     printf("Введите содержание заметки: ");
-    scanf("%s", description);
-
-    printf("Введите дату создания заметки: ");
-    scanf("%s", date);
+    fgets(description, sizeof(description), stdin);
 
     printf("Введите крайний срок выполнения заметки: ");
     scanf("%s", deadline);
-
-    int choice = 0;
+    getchar();
+    int choice;
     do
     {
-        printf("Введите статус: 1 - Срочно, 2 - Важно\n");
-        scanf("%d", &choice);
+        printf("Введите статус: 1 - Срочно, 2 - Важно, 3 - Другое\n");
+        choice = getchar();
+        if (choice == '\n')
+        {
+            choice = getchar();
+        }
         switch (choice)
         {
-        case 1:
+        case '1':
             strcpy(teg, "Срочно");
             break;
-        case 2:
+        case '2':
             strcpy(teg, "Важно");
+            break;
+        case '3':
+            strcpy(teg, "Другое");
             break;
         default:
             printf("Неверный выбор, попробуите снова\n");
+            break;
         }
-    } while (choice != 1 && choice != 2);
-    fprintf(Task_file, "Task {\nId: %d;\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, date, deadline, description);
+    } while (choice != '1' && choice != '2' && choice != '3');
+    fprintf(Task_file, "Task {\nId: %d;\nName: %s;\nTeg: %s;\nDate created: %d.%d.%d;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, now->tm_mday, now->tm_mon + 1, now->tm_year + 1900, deadline, description);
+    fclose(Task_file);
 }
 
 void print_list()
@@ -137,7 +147,6 @@ void print_list()
             fgets(name, sizeof(line), file);
         }
         sscanf(line, "Teg: %s;", teg);
-        sscanf(line, "Teg: %s;", teg);
         if (strcmp(teg, "Другое;") == 0)
         {
             printf("%d - ", id);
@@ -178,6 +187,7 @@ void delete_task()
     }
 
     printf("Pass\n");
+    fclose(file);
 }
 
 void check_task()
@@ -220,16 +230,33 @@ void print_task()
             int count = 0;
             while ((fgets(line, sizeof(line), file) != NULL) && count < 7)
             {
-                sscanf(line, "Name: %s;", name);
+                if(sscanf(line, "Name: %s", name))
+                {   
+                    strcpy(name, "");
+                    fseek(file, -strlen(line), SEEK_CUR);
+                    fgets(name, sizeof(line), file);
+                }
                 sscanf(line, "Teg: %s;", teg);
                 sscanf(line, "Date created: %s;", date);
                 sscanf(line, "Deadline: %s;", deadline);
                 sscanf(line, "Dayly: %s;", dayly);
-                sscanf(line, "Description: %s;", description);
+                if(sscanf(line, "Description: %s;", description))
+                {   
+                    strcpy(description, "");
+                    fseek(file, -strlen(line), SEEK_CUR);
+                    fgets(description, sizeof(line), file);
+                }
                 count++;
             }
             printf("-----------------------------------\n");
-            printf("Название заметки: %s\n", name);
+            printf("Название заметки: ");
+            for (size_t i = 0; i < strlen(name); i++)
+            {   
+                if (i > 5)
+                {
+                    printf("%c", name[i]);
+                }
+            }
             printf("Тег: %s\n", teg);
             printf("Дата создания: %s\n", date);
             if (deadline != 0)
@@ -240,9 +267,19 @@ void print_task()
             {
                     printf("Ежедневно");
             }
-            printf("Содержание: %s\n", description);
+            printf("Содержание: ");
+            for (size_t i = 0; i < strlen(description); i++)
+            {   
+                if (i > 12)
+                {
+                    printf("%c", description[i]);
+                }
+            }
+            printf("\n");
             printf("-----------------------------------\n");
-            scanf("%d", &id);
+            getchar();
+            getchar();
+            fclose(file);
             break;
         }
     } 
