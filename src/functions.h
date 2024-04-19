@@ -12,6 +12,7 @@ void delete_task(); // удаление заметки
 void check_task(); // просмотр заметки
 void complete_task(); // отметить задачу как выполненную  и удалить
 void print_menu(); // вывод меню
+int get_variant(int count); // выбор пункта в меню
 
 
 #endif
