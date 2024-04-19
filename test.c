@@ -4,6 +4,7 @@
 #include <string.h>
 void print_list();
 void print_task();
+void delete_task();
 void print_menu();
 int get_variant(int count);
 void create_task()
@@ -105,7 +106,7 @@ int main()
             create_task();
             break;
         case 4:
-            create_task();
+            delete_task();
             break;
         case 5:
             exit(0);
@@ -281,5 +282,41 @@ void print_task()
             break;
         }
     } 
+    fclose(file);
+}
+
+void delete_task()
+{
+    FILE *file = fopen("task.txt", "r+b");
+    if (file == NULL)
+    {
+        printf("Не удалось открыть файл для чтения.\n");
+        exit(1);
+    }
+    char line[50] = {0};
+    int num_line = 1;
+
+    int id_p;
+    int id;
+    printf("Введите номер задачи:");
+    scanf("%d", &id_p);
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        sscanf(line, "Id: %d;", &id);
+        if (id_p == id)
+        {
+            fseek(file, -strlen(line) * 2, SEEK_CUR);
+            while ((fgets(line, sizeof(line), file) != NULL) && (num_line <= 12))
+            {
+                if (num_line <= 12)
+                {
+                    fprintf(file, "                                                                                                                                       ");
+                    num_line++;
+                }
+            }
+            id++;
+        }
+    }
+
     fclose(file);
 }
