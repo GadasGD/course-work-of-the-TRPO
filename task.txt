@@ -30,26 +30,6 @@ Description: Посадить яблоню на участке;
  
 Task {
 Id: 4;
-Name: gfdgs;
-Teg: Другое;
-Date created: fasdfa;
-Deadline: asdfa;
-Dayly: false;
-Description: sadfa;
-}
- 
-Task {
-Id: 5;
-Name: Матан;
-Teg: Другое;
-Date created: завтра;
-Deadline: сегодня;
-Dayly: false;
-Description: Сделать_матан;
-}
- 
-Task {
-Id: 6;
 Name: почитать;
 Teg: Важно;
 Date created: никогда;
@@ -59,66 +39,32 @@ Description: гоголь_жив;
 }
  
 Task {
-Id: 7;
-Name: 0;
-Teg: Важно;
-Date created: 0;
-Deadline: 0;
-Dayly: false;
-Description: 0;
-}
- 
-Task {
-Id: 8;
-Name: 9;
-Teg: Срочно;
-Date created: 9;
-Deadline: 9;
-Dayly: false;
-Description: 9;
-}
- 
-Task {
-Id: 9;
-Name: 6;
-Teg: Важно;
-Date created: 6;
-Deadline: 6;
-Dayly: false;
-Description: 6;
-}
- 
-Task {
-Id: 10;
-Name: Выполнить цели;
-Teg: Важно;
-Date created: сегодня;
-Deadline: 11;
-Dayly: false;
-Description: 1 - построить дом, 2 - посадить дерево, 3 - вырастить сына;
-}
- 
-Task {
-Id: 11;
-Name: 55
-;
-Teg: Срочно;
-Date created: test;
-Deadline: test;
-Dayly: false;
-Description: test
-;
-}
- 
-Task {
-Id: 12;
-Name: Изобрести что-то крутое
-;
+Id: 5;
+Name: Изобрести что-то крутое;
 Teg: Другое;
 Date created: 4.4.2024;
 Deadline: $2077$;
 Dayly: false;
-Description: Сделать что-то по-настоящему сногшибательное
-;
+Description: Сделать что-то по-настоящему сногшибательное;
+}
+ 
+Task {
+Id: 6;
+Name: тест1;
+Teg: Срочно;
+Date created: 20.4.2024;
+Deadline: 2;
+Dayly: false;
+Description: тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест;
+}
+ 
+Task {
+Id: 7;
+Name: тест2;
+Teg: Важно;
+Date created: 20.4.2024;
+Deadline: завтра;
+Dayly: false;
+Description: тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест;
 }
  

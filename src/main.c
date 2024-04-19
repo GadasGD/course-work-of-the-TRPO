@@ -8,7 +8,7 @@ int main()
         print_list();
         print_menu();
 
-        choice = get_variant(5);
+        choice = get_variant(6);
         switch (choice)
         {
         case 1:
@@ -18,17 +18,20 @@ int main()
             print_task();
             break;
         case 3:
-            check_task();
+            complete_task();
             break;
         case 4:
             delete_task();
             break;
         case 5:
+            print_complete_tasklist();
+            break;
+        case 6:
             exit(0);
         default:
             printf("Неверный выбор операции. Попробуйте снова.\n\n");
         }
-    } while (choice != 5);
+    } while (choice != 6);
 
     return 0;
 }
