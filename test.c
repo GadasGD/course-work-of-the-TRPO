@@ -133,96 +133,125 @@ void print_menu()
 void print_list()
 {
     FILE *file = fopen("task.txt", "r");
-    printf("-----------------------------------\nЗадачи:\nСрочное:\n");
+    if (file == NULL)
+    {
+        printf("Не удалось открыть файл для чтения.\n");
+        exit(1);
+    }
+
     int id = 0;
-    int max_id = 0;
-    char teg[100] = "";
+    char tag[100] = "";
     char line[100] = "";
     char name[100] = "";
-    while (fgets(line, sizeof(line), file) != NULL)
-    {
-        sscanf(line, "Id: %d;", &max_id);
-    }
-    fseek(file, 0, SEEK_SET);
-    while (fgets(line, sizeof(line), file) != NULL)
+    char name2[100] = "";
+
+    printf("-----------------------------------\nЗадачи:\nСрочное:\n");
+    while (fgets(line, sizeof(line), file) != NULL) // вывод для срочно
     {
         sscanf(line, "Id: %d;", &id);
-        if(sscanf(line, "Name: %s", name))
-        {   
+        if (sscanf(line, "Name: %s", name))
+        {
             strcpy(name, "");
             fseek(file, -strlen(line), SEEK_CUR);
             fgets(name, sizeof(line), file);
         }
-        sscanf(line, "Teg: %s;", teg);
-        if (strcmp(teg, "Срочно;") == 0)
+        sscanf(line, "Tag: %s;", tag);
+        if (strcmp(tag, "Срочно;") == 0)
         {
             printf("%d - ", id);
-            for (int i = 0; i < strlen(name); i++)
-            {   
+            for (size_t i = 0, j = 0; i < strlen(name); i++)
+            {
                 if (i > 5)
                 {
-                    printf("%c", name[i]);
-                }
+                    name2[j] = name[i];
+                    j++;
+                }   
             }
-            strcpy(teg, "");
+            if((name2[1] <= -65 && name2[1] >= -80))
+            {
+                name2[1] -= 32;
+            }
+            if ((name2[1] <= -113 && name2[1] >= -128))
+            {
+                name2[0] -= 1;
+                name2[1] += 32;
+            }
+            if (name2[0] >= 97 && name2[0] <= 122)
+            {
+                name2[0] = toupper(name2[0]);
+            }
+            printf("%s", name2);
+            strcpy(tag, "");
         }
     }
-    fseek(file, 0, SEEK_SET);
+    fseek(file, 0, SEEK_SET); // возвращение в начало файла
+    strcpy(tag, ""); // обнуление переменной
+
+
     printf("Важно:\n");
-    id = 1;
-    strcpy(teg, "");
-    while (fgets(line, sizeof(line), file) != NULL)
+    while (fgets(line, sizeof(line), file) != NULL) // вывод для важного
     {
         sscanf(line, "Id: %d;", &id);
-        if(sscanf(line, "Name: %s", name))
-        {   
+        if (sscanf(line, "Name: %s", name))
+        {
             strcpy(name, "");
             fseek(file, -strlen(line), SEEK_CUR);
             fgets(name, sizeof(line), file);
         }
-        sscanf(line, "Teg: %s;", teg);
-        if (strcmp(teg, "Важно;") == 0)
+        sscanf(line, "Tag: %s;", tag);
+        if (strcmp(tag, "Важно;") == 0)
         {
             printf("%d - ", id);
-            for (int i = 0; i < strlen(name); i++)
-            {   
+            for (size_t i = 0; i < strlen(name); i++)
+            {
                 if (i > 5)
                 {
+                    if (i == 6 && islower(name[6]))
+                    {   
+                        name[7] -= 32;
+                        printf("%c", name[i]);
+                    }
                     printf("%c", name[i]);
                 }
             }
-            strcpy(teg, "");
+            strcpy(tag, "");
         }
     }
-    fseek(file, 0, SEEK_SET);
+    fseek(file, 0, SEEK_SET); // возвращение в начало файла
+    strcpy(tag, ""); // обнуление переменной
+
+
     printf("Другое:\n");
-    id = 1;
-    strcpy(teg, "");
-    while (fgets(line, sizeof(line), file) != NULL)
+    while (fgets(line, sizeof(line), file) != NULL) // вывод для "другого"
     {
         sscanf(line, "Id: %d;", &id);
-        if(sscanf(line, "Name: %s", name))
-        {   
+        if (sscanf(line, "Name: %s", name))
+        {
             strcpy(name, "");
             fseek(file, -strlen(line), SEEK_CUR);
             fgets(name, sizeof(line), file);
         }
-        sscanf(line, "Teg: %s;", teg);
-        sscanf(line, "Teg: %s;", teg);
-        if (strcmp(teg, "Другое;") == 0)
+        sscanf(line, "Tag: %s;", tag);
+        if (strcmp(tag, "Другое;") == 0)
         {
             printf("%d - ", id);
-            for (int i = 0; i < strlen(name); i++)
-            {   
+            for (size_t i = 0; i < strlen(name); i++)
+            {
                 if (i > 5)
                 {
+                    if (i == 6 && islower(name[6]))
+                    {   
+                        name[7] -= 32;
+                        printf("%c", name[i]);
+                    }
                     printf("%c", name[i]);
                 }
             }
-            strcpy(teg, "");
+            strcpy(tag, "");
         }
     }
     printf("-----------------------------------\n");
+
     fclose(file);
 }
 void print_task()

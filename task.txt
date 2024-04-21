@@ -1,8 +1,8 @@
 Task {
 Id: 1;
-Name: Убраться;
-Teg: Важно;
-Date created: 11.11.2015;
+Name: RуаАбБаться;
+Tag: Важно;
+Date_created: 11.11.2015;
 Deadline: 12.11.2015;
 Dayly: false;
 Description: Убраться в гостинной;
@@ -10,9 +10,9 @@ Description: Убраться в гостинной;
  
 Task {
 Id: 2;
-Name: Купить продукты;
-Teg: Важно;
-Date created: 11.11.2011;
+Name: kупить продукты;
+Tag: Важно;
+Date_created: 11.11.2011;
 Deadline: 1.11.2011;
 Dayly: false;
 Description: Купить хлеб и молоко;
@@ -20,9 +20,9 @@ Description: Купить хлеб и молоко;
  
 Task {
 Id: 3;
-Name: Посадить дерево;
-Teg: Важно;
-Date created: 11.12.2012;
+Name: посадить дерево;
+Tag: Важно;
+Date_created: 11.12.2012;
 Deadline: 1.11.2013;
 Dayly: false;
 Description: Посадить яблоню на участке;
@@ -30,41 +30,21 @@ Description: Посадить яблоню на участке;
  
 Task {
 Id: 4;
-Name: почитать;
-Teg: Важно;
-Date created: никогда;
-Deadline: незачем;
-Dayly: false;
-Description: гоголь_жив;
-}
- 
-Task {
-Id: 5;
-Name: Изобрести что-то крутое;
-Teg: Другое;
-Date created: 4.4.2024;
+Name: изобрести что-то крутое;
+Tag: Другое;
+Date_created: 4.4.2024;
 Deadline: $2077$;
 Dayly: false;
 Description: Сделать что-то по-настоящему сногшибательное;
 }
  
 Task {
-Id: 6;
-Name: тест1;
-Teg: Срочно;
-Date created: 20.4.2024;
-Deadline: 2;
-Dayly: false;
-Description: тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест;
-}
- 
-Task {
-Id: 7;
-Name: тест2;
-Teg: Важно;
-Date created: 20.4.2024;
+Id: 5;
+Name: выучить английский;
+Tag: Срочно;
+Date_created: 21.4.2024;
 Deadline: завтра;
-Dayly: false;
-Description: тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест тест;
+Daily: false;
+Description: выучить диалог по английскому;
 }
  
