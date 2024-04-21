@@ -28,8 +28,8 @@ int main()
             break;
         case 6:
             exit(0);
-        default:
-            printf("Неверный выбор операции. Попробуйте снова.\n\n");
+        // default:
+        //     printf("Неверный выбор операции. Попробуйте снова.\n\n");
         }
     } while (choice != 6);
 

@@ -292,37 +292,96 @@ void print_task()
 void delete_task()
 {
     FILE *file = fopen("task.txt", "r+b");
+    FILE *swap = fopen("transitory_task.txt", "w+");
     if (file == NULL)
     {
         printf("Не удалось открыть файл для чтения.\n");
         exit(1);
     }
-    char line[50] = {0};
-    int num_line = 1;
 
-    int id_p;
-    int id;
-    printf("Введите номер задачи:");
-    scanf("%d", &id_p);
+    char line[100];
+    int user_id, task_id, new_id = 1, max_id;
+    bool flag = true;
+    int count = 0;
+
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        sscanf(line, "Id: %d;", &id);
-        if (id_p == id)
-        {
-            fseek(file, -strlen(line) * 2, SEEK_CUR);
-            while ((fgets(line, sizeof(line), file) != NULL) && (num_line <= 12))
-            {
-                if (num_line <= 12)
-                {
-                    fprintf(file, "                                                                                                                                       ");
-                    num_line++;
-                }
-            }
-            id++;
-        }
+        sscanf(line, "Id: %d;", &max_id);
+    }
+    fseek(file, 0, SEEK_SET);
+
+    printf("Введите номер задачи:\n>>> ");
+    scanf("%d", &user_id);
+    if (user_id > max_id || user_id < 1)
+    {
+        printf("Заметка не найдена");
+        printf("Нажмите любую кнопку, чтобы продолжить\n>>> ");
+        getchar();
+        getchar();
+        return;
     }
 
+
+    while (fgets(line, sizeof(line), file) != NULL) // запись во временный файл
+    {   
+        if(flag)
+        {
+            if(sscanf(line, "Id: %d;", &task_id))
+            {   
+                if (user_id == task_id)
+                {   
+                    int line_deleted_task = 0;
+                    while ((fgets(line, sizeof(line), file) != NULL) && (line_deleted_task < 8))
+                    {
+                        line_deleted_task++;
+                    }
+                }
+                else
+                {
+                    count = 0;
+                    flag = false;
+                    fseek(file, -strlen(line) - 7, SEEK_CUR);
+                    continue;
+                }
+
+            }
+        }
+        if (user_id != task_id)
+        {   
+            if (count < 10 && flag == false)
+            {
+                fputs(line, swap);
+                count++;
+            }
+            if (count > 9)
+            {
+                flag = true;
+            }
+        }
+    }
+    fclose(swap);
     fclose(file);
+
+
+    FILE *task = fopen("task.txt", "w+");
+    FILE *swap1 = fopen("transitory_task.txt", "r+b");
+
+    while (fgets(line, sizeof(line), swap1) != NULL) // запись в файл заметок из временного файла
+    {
+        if (sscanf(line, "Id: %d;", &task_id) == 1) // новый id
+        {
+            fprintf(task, "Id: %d;\n", new_id);
+            new_id++;
+        }
+        else
+        {
+            fputs(line, task);
+        }
+
+    }
+    fclose(swap1);
+    fclose(task);
+    remove("transitory_task.txt");
 }
 
 void complete_task()

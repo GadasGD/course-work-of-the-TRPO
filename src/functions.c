@@ -7,7 +7,7 @@ void print_menu()
     printf("\n-----------------------------------\n1 - создать новую задачу\n2 "
                "- посмотреть задачу\n3 - отметить как выполненное\n4 - удалить "
                "задачу\n5 - просмотреть выполненные задачи\n6 - выйти\n-----------------------------------\n");
-    printf("Введите номер действия: ");  
+    printf("Введите номер действия:\n>>> ");  
 }
 
 int get_variant(int count)
@@ -19,8 +19,10 @@ int get_variant(int count)
     while (sscanf(s, "%d", &variant) != 1 || variant < 1 || variant > count)
     {
         printf("Неккоретный ввод\n");
-        print_list();
-        print_menu();
+        printf("Нажмите любую кнопку, чтобы продолжить\n>>> ");
+        getchar();
+        getchar();
+        break;
     }
     return variant;
 }
@@ -38,7 +40,7 @@ void create_task()
     time_t date = time(NULL);
     struct tm *now = localtime(&date);
     char deadline[100] = "";
-    char teg[100] = "";
+    char tag[100] = "";
     char line[100] = "";
     int id = 1;
 
@@ -74,22 +76,22 @@ void create_task()
         switch (choice)
         {
         case '1':
-            strcpy(teg, "Срочно");
+            strcpy(tag, "Срочно");
             break;
         case '2':
-            strcpy(teg, "Важно");
+            strcpy(tag, "Важно");
             break;
         case '3':
-            strcpy(teg, "Другое");
+            strcpy(tag, "Другое");
             break;
         default:
-            printf("Неверный выбор, попробуите снова\n");
+            printf("Неверный выбор, попробуйте снова\n");
             break;
         }
     } while (choice != '1' && choice != '2' && choice != '3');
     fprintf(Task_file, "Task {\nId: %d;\nName: %s", id, name);
     fseek(Task_file, -1, SEEK_CUR);
-    fprintf(Task_file, ";\nTeg: %s;\nDate created: %d.%d.%d;\nDeadline: %s;\nDayly: false;\nDescription: %s", teg, now->tm_mday, now->tm_mon + 1, now->tm_year + 1900, deadline, description);
+    fprintf(Task_file, ";\nTag: %s;\nDate_created: %d.%d.%d;\nDeadline: %s;\nDaily: false;\nDescription: %s", tag, now->tm_mday, now->tm_mon + 1, now->tm_year + 1900, deadline, description);
     fseek(Task_file, -1, SEEK_CUR);
     fprintf(Task_file,";\n}\n ");
     fclose(Task_file);
@@ -105,7 +107,7 @@ void print_list()
     }
 
     int id = 0;
-    char teg[100] = "";
+    char tag[100] = "";
     char line[100] = "";
     char name[100] = "";
     
@@ -120,8 +122,8 @@ void print_list()
             fseek(file, -strlen(line), SEEK_CUR);
             fgets(name, sizeof(line), file);
         }
-        sscanf(line, "Teg: %s;", teg);
-        if (strcmp(teg, "Срочно;") == 0)
+        sscanf(line, "Tag: %s;", tag);
+        if (strcmp(tag, "Срочно;") == 0)
         {
             printf("%d - ", id);
             for (size_t i = 0; i < strlen(name); i++)
@@ -131,11 +133,11 @@ void print_list()
                     printf("%c", name[i]);
                 }
             }
-            strcpy(teg, "");
+            strcpy(tag, "");
         }
     }
     fseek(file, 0, SEEK_SET); // возвращение в начало файла
-    strcpy(teg, ""); // обнуление переменной
+    strcpy(tag, ""); // обнуление переменной
 
 
     printf("Важно:\n");
@@ -148,8 +150,8 @@ void print_list()
             fseek(file, -strlen(line), SEEK_CUR);
             fgets(name, sizeof(line), file);
         }
-        sscanf(line, "Teg: %s;", teg);
-        if (strcmp(teg, "Важно;") == 0)
+        sscanf(line, "Tag: %s;", tag);
+        if (strcmp(tag, "Важно;") == 0)
         {
             printf("%d - ", id);
             for (size_t i = 0; i < strlen(name); i++)
@@ -159,15 +161,15 @@ void print_list()
                     printf("%c", name[i]);
                 }
             }
-            strcpy(teg, "");
+            strcpy(tag, "");
         }
     }
     fseek(file, 0, SEEK_SET); // возвращение в начало файла
-    strcpy(teg, ""); // обнуление переменной
+    strcpy(tag, ""); // обнуление переменной
 
 
     printf("Другое:\n");
-    while (fgets(line, sizeof(line), file) != NULL) // вывод для другого
+    while (fgets(line, sizeof(line), file) != NULL) // вывод для "другого"
     {
         sscanf(line, "Id: %d;", &id);
         if (sscanf(line, "Name: %s", name))
@@ -176,8 +178,8 @@ void print_list()
             fseek(file, -strlen(line), SEEK_CUR);
             fgets(name, sizeof(line), file);
         }
-        sscanf(line, "Teg: %s;", teg);
-        if (strcmp(teg, "Другое;") == 0)
+        sscanf(line, "Tag: %s;", tag);
+        if (strcmp(tag, "Другое;") == 0)
         {
             printf("%d - ", id);
             for (size_t i = 0; i < strlen(name); i++)
@@ -187,7 +189,7 @@ void print_list()
                     printf("%c", name[i]);
                 }
             }
-            strcpy(teg, "");
+            strcpy(tag, "");
         }
     }
     printf("-----------------------------------\n");
@@ -199,10 +201,10 @@ void print_task()
     int user_id, id = 0, max_id = 0;
     char line[1000] = "";
     char name[100] = "";
-    char teg[100] = "";
+    char tag[100] = "";
     char date[100] = "";
     char deadline[100] = "";
-    char dayly[100] = "";
+    char daily[100] = "";
     char description[1000] = "";
 
     FILE *file = fopen("task.txt", "r");
@@ -222,7 +224,10 @@ void print_task()
     scanf("%d", &user_id);
     if (user_id > max_id || user_id < 1)
     {
-        printf("Заметка не найдена");
+        printf("Заметка не найдена\n");
+        printf("Нажмите любую кнопку, чтобы продолжить\n>>> ");
+        getchar();
+        getchar();
         return;
     }
 
@@ -240,10 +245,10 @@ void print_task()
                     fseek(file, -strlen(line), SEEK_CUR);
                     fgets(name, sizeof(line), file);
                 }
-                sscanf(line, "Teg: %s;", teg);
-                sscanf(line, "Date created: %s;", date);
+                sscanf(line, "Tag: %s;", tag);
+                sscanf(line, "Date_created: %s;", date);
                 sscanf(line, "Deadline: %s;", deadline);
-                sscanf(line, "Dayly: %s;", dayly);
+                sscanf(line, "Daily: %s;", daily);
                 if (sscanf(line, "Description: %s;", description))
                 {
                     strcpy(description, "");
@@ -261,13 +266,11 @@ void print_task()
                     printf("%c", name[i]);
                 }
             }
-            printf("Тег: %s\n", teg);
+            printf("Тег: %s\n", tag);
             printf("Дата создания: %s\n", date);
-            if (deadline != 0)
-            {
-                printf("Крайний срок выполнения: %s\n", deadline);
-            }
-            if (strcmp(dayly, "true;") == 0)
+            printf("Крайний срок выполнения: %s\n", deadline);
+        
+            if (strcmp(daily, "true;") == 0)
             {
                 printf("Ежедневно");
             }
@@ -281,6 +284,7 @@ void print_task()
             }
             printf("\n");
             printf("-----------------------------------\n");
+            printf("Нажмите любую кнопку, чтобы продолжить\n>>> ");
             getchar();
             getchar();
             fclose(file);
@@ -301,6 +305,8 @@ void delete_task()
 
     char line[100];
     int user_id, task_id, new_id = 1, max_id;
+    bool flag = true;
+    int count = 0;
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
@@ -308,22 +314,53 @@ void delete_task()
     }
     fseek(file, 0, SEEK_SET);
 
-    printf("Введите номер задачи:");
+    printf("Введите номер задачи:\n>>> ");
     scanf("%d", &user_id);
     if (user_id > max_id || user_id < 1)
     {
         printf("Заметка не найдена");
+        printf("Нажмите любую кнопку, чтобы продолжить\n>>> ");
+        getchar();
+        getchar();
         return;
     }
 
 
     while (fgets(line, sizeof(line), file) != NULL) // запись во временный файл
-    {
-        sscanf(line, "Id: %d;", &task_id);
+    {   
+        if(flag)
+        {
+            if(sscanf(line, "Id: %d;", &task_id))
+            {   
+                if (user_id == task_id)
+                {   
+                    int line_deleted_task = 0;
+                    while ((fgets(line, sizeof(line), file) != NULL) && (line_deleted_task < 8))
+                    {
+                        line_deleted_task++;
+                    }
+                }
+                else
+                {
+                    count = 0;
+                    flag = false;
+                    fseek(file, -strlen(line) - 7, SEEK_CUR);
+                    continue;
+                }
 
+            }
+        }
         if (user_id != task_id)
         {   
-            fputs(line, swap);
+            if (count < 10 && flag == false)
+            {
+                fputs(line, swap);
+                count++;
+            }
+            if (count > 9)
+            {
+                flag = true;
+            }
         }
     }
     fclose(swap);
@@ -380,6 +417,9 @@ void complete_task()
     if (user_id > max_id || user_id < 1)
     {
         printf("Заметка не найдена");
+        printf("Нажмите любую кнопку, чтобы продолжить\n>>> ");
+        getchar();
+        getchar();
         return;
     }
 
@@ -442,7 +482,6 @@ void complete_task()
                 {
                     task_id++;
                     flag = true;
-                    //fseek(file, +6, SEEK_CUR);
                 }
             }
         }
@@ -504,7 +543,7 @@ void print_complete_tasklist()
     }
     fseek(file, 0, SEEK_SET);
 
-    printf("-----------------------------------\nВсего выполненно задач: %d, из них сегодня выполненно: %d\n", max_id, count_task_day);
+    printf("-----------------------------------\nВсего выполнено задач: %d, из них сегодня выполнено: %d\n", max_id, count_task_day);
     printf("Задачи: \n");
     while (fgets(line, sizeof(line), file) != NULL)
     {
@@ -531,13 +570,23 @@ void print_complete_tasklist()
                     printf("%c", name[i]);
                 }
             }
-            printf(", выполненно: %d.%d.%d;\n", mday, mon, year);
+
+            if (now->tm_mon + 1 < 10) 
+            {
+                printf(", выполнено: %d.0%d.%d;\n", mday, mon, year);
+            }
+            else
+            {
+                printf(", выполнено: %d.%d.%d;\n", mday, mon, year);
+            }
+
             flag = false;
             strcpy(name, "");
         }
     }
     printf("-----------------------------------\n");
-    fclose(file);
-    getchar(); // чтобы enter пропустить
+    getchar(); // двойной getchar, чтобы пропустить enter 
+    printf("Нажмите любую кнопку, чтобы продолжить\n>>> ");
     getchar();
+    fclose(file);
 }
