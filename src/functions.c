@@ -120,7 +120,7 @@ void format_name(char name[]) // делает первую букву загла
             name_formated[0] -= 1;
             name_formated[1] += 32;
         }
-        if (name_formated[0] >= 97 && name_formated[0] <= 122)
+        if (islower(name_formated[0]))
         {
             name_formated[0] = toupper(name_formated[0]);
         }
