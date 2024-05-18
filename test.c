@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 void print_list();
 void print_task();
@@ -44,7 +45,7 @@ void create_task()
 
     printf("Введите дату создания заметки: ");
     scanf("%s", date);
-    
+
     printf("Введите крайний срок выполнения заметки: ");
     scanf("%s", deadline);
     getchar();
@@ -68,7 +69,6 @@ void create_task()
     fprintf(Task_file, "Task {\nId: %d;\nName: %s;\nTeg: %s;\nDate created: %s;\nDeadline: %s;\nDayly: false;\nDescription: %s;\n}\n ", id, name, teg, date, deadline, description);
 }
 
-
 int get_variant(int count)
 {
     int variant;
@@ -80,54 +80,16 @@ int get_variant(int count)
         printf("Неккоретный ввод\n");
         print_list();
         print_menu();
-
     }
     return variant;
-}
-
-
-
-int main()
-{
-    int choice;
-    do
-    {
-        print_list();
-        print_menu();
-
-        choice = get_variant(6);
-        switch (choice)
-        {
-        case 1:
-            create_task();
-            break;
-        case 2:
-            print_task();
-            break;
-        case 3:
-            complete_task();
-            break;
-        case 4:
-            delete_task();
-            break;
-        case 5:
-            print_complete_tasklist();
-        case 6:
-            exit(0);
-        default:
-            printf("Неверный выбор операции. Попробуйте снова.\n\n");
-        }
-    } while (choice != 6);
-
-    return 0;
 }
 
 void print_menu()
 {
     printf("\n-----------------------------------\n1 - создать новую задачу\n2 "
-               "- посмотреть задачу\n3 - отметить как выполненное\n4 - удалить "
-               "задачу\n5 - просмотреть выполненные задачи\n6 - выйти\n-----------------------------------\n");
-    printf("Введите номер действия: ");  
+           "- посмотреть задачу\n3 - отметить как выполненное\n4 - удалить "
+           "задачу\n5 - просмотреть выполненные задачи\n6 - выйти\n-----------------------------------\n");
+    printf("Введите номер действия: ");
 }
 
 void print_list()
@@ -165,9 +127,9 @@ void print_list()
                 {
                     name2[j] = name[i];
                     j++;
-                }   
+                }
             }
-            if((name2[1] <= -65 && name2[1] >= -80))
+            if ((name2[1] <= -65 && name2[1] >= -80))
             {
                 name2[1] -= 32;
             }
@@ -185,8 +147,7 @@ void print_list()
         }
     }
     fseek(file, 0, SEEK_SET); // возвращение в начало файла
-    strcpy(tag, ""); // обнуление переменной
-
+    strcpy(tag, "");          // обнуление переменной
 
     printf("Важно:\n");
     while (fgets(line, sizeof(line), file) != NULL) // вывод для важного
@@ -207,7 +168,7 @@ void print_list()
                 if (i > 5)
                 {
                     if (i == 6 && islower(name[6]))
-                    {   
+                    {
                         name[7] -= 32;
                         printf("%c", name[i]);
                     }
@@ -218,8 +179,7 @@ void print_list()
         }
     }
     fseek(file, 0, SEEK_SET); // возвращение в начало файла
-    strcpy(tag, ""); // обнуление переменной
-
+    strcpy(tag, "");          // обнуление переменной
 
     printf("Другое:\n");
     while (fgets(line, sizeof(line), file) != NULL) // вывод для "другого"
@@ -240,7 +200,7 @@ void print_list()
                 if (i > 5)
                 {
                     if (i == 6 && islower(name[6]))
-                    {   
+                    {
                         name[7] -= 32;
                         printf("%c", name[i]);
                     }
@@ -275,7 +235,7 @@ void print_task()
 
     printf("Введите номер нужной заметки: ");
     scanf("%d", &id_task);
-    if(id_task > max_id && id_task < 1)
+    if (id_task > max_id && id_task < 1)
     {
         printf("Заметка не найдена");
         return;
@@ -303,18 +263,18 @@ void print_task()
             printf("Дата создания: %s\n", date);
             if (deadline != 0)
             {
-                    printf("Крайний срок выполнения: %s\n", deadline);
+                printf("Крайний срок выполнения: %s\n", deadline);
             }
             if (strcmp(dayly, "true;") == 0)
             {
-                    printf("Ежедневно");
+                printf("Ежедневно");
             }
             printf("Содержание: %s\n", description);
             printf("-----------------------------------\n");
             scanf("%d", &id);
             break;
         }
-    } 
+    }
     fclose(file);
 }
 
@@ -350,15 +310,14 @@ void delete_task()
         return;
     }
 
-
     while (fgets(line, sizeof(line), file) != NULL) // запись во временный файл
-    {   
-        if(flag)
+    {
+        if (flag)
         {
-            if(sscanf(line, "Id: %d;", &task_id))
-            {   
+            if (sscanf(line, "Id: %d;", &task_id))
+            {
                 if (user_id == task_id)
-                {   
+                {
                     int line_deleted_task = 0;
                     while ((fgets(line, sizeof(line), file) != NULL) && (line_deleted_task < 8))
                     {
@@ -372,11 +331,10 @@ void delete_task()
                     fseek(file, -strlen(line) - 7, SEEK_CUR);
                     continue;
                 }
-
             }
         }
         if (user_id != task_id)
-        {   
+        {
             if (count < 10 && flag == false)
             {
                 fputs(line, swap);
@@ -390,7 +348,6 @@ void delete_task()
     }
     fclose(swap);
     fclose(file);
-
 
     FILE *task = fopen("task.txt", "w+");
     FILE *swap1 = fopen("transitory_task.txt", "r+b");
@@ -406,7 +363,6 @@ void delete_task()
         {
             fputs(line, task);
         }
-
     }
     fclose(swap1);
     fclose(task);
@@ -415,8 +371,8 @@ void delete_task()
 
 void complete_task()
 {
-    FILE *file = fopen("task.txt", "r+b"); // файл хранящий заметки (открывается на чтение без удаления содержимого)
-    FILE *swap = fopen("transitory_task.txt", "w+"); // создание временного файла для заметок
+    FILE *file = fopen("task.txt", "r+b");                       // файл хранящий заметки (открывается на чтение без удаления содержимого)
+    FILE *swap = fopen("transitory_task.txt", "w+");             // создание временного файла для заметок
     FILE *complete_task_file = fopen("complete_task.txt", "a+"); // файл с выполнеными заметками (открывается на дополнение)
     if (file == NULL)
     {
@@ -442,10 +398,10 @@ void complete_task()
 
     int count = 0;
     while (fgets(line, sizeof(line), file) != NULL)
-    {   
-        if(flag)
+    {
+        if (flag)
         {
-            if(sscanf(line, "Id: %d;", &task_id))
+            if (sscanf(line, "Id: %d;", &task_id))
             {
                 count = 0;
                 flag = false;
@@ -453,9 +409,9 @@ void complete_task()
                 continue;
             }
         }
-        
+
         if (user_id != task_id)
-        {   
+        {
             if (count < 10 && flag == false)
             {
                 fputs(line, swap);
@@ -467,14 +423,14 @@ void complete_task()
             }
         }
         else
-        {   
+        {
             fseek(file, -strlen(line), SEEK_CUR);
             while ((fgets(line, sizeof(line), file) != NULL) && line_count < 10)
             {
                 if (sscanf(line, "Id: %d;", &user_id) == 1)
                 {
                     fprintf(complete_task_file, "Id: %d;\n", complete_task_id);
-                    if (now->tm_mon + 1 < 10) 
+                    if (now->tm_mon + 1 < 10)
                     {
                         fprintf(complete_task_file, "Date_complete: %d.0%d.%d;\n", now->tm_mday, now->tm_mon + 1, now->tm_year + 1900);
                     }
@@ -492,7 +448,7 @@ void complete_task()
                 {
                     task_id++;
                     flag = true;
-                    //fseek(file, +6, SEEK_CUR);
+                    // fseek(file, +6, SEEK_CUR);
                 }
             }
         }
@@ -502,10 +458,9 @@ void complete_task()
     fclose(file);
     fclose(complete_task_file);
 
-    FILE *task = fopen("task.txt", "w+"); // файл с заметками открывается с удалением содержимого
-    FILE *swap1 = fopen("transitory_task.txt", "r+b"); // временный файл открывается на чтение 
+    FILE *task = fopen("task.txt", "w+");              // файл с заметками открывается с удалением содержимого
+    FILE *swap1 = fopen("transitory_task.txt", "r+b"); // временный файл открывается на чтение
 
-    
     while (fgets(line, sizeof(line), swap1) != NULL)
     {
         if (sscanf(line, "Id: %d;", &task_id) == 1)
@@ -517,7 +472,6 @@ void complete_task()
         {
             fputs(line, task);
         }
-
     }
     fclose(swap1);
     fclose(task);
@@ -534,7 +488,6 @@ void print_complete_tasklist()
     int tm_mday, tm_mon, tm_year;
     bool flag = false;
 
-
     while (fgets(line, sizeof(line), file) != NULL)
     {
         sscanf(line, "Id: %d;", &id);
@@ -545,7 +498,7 @@ void print_complete_tasklist()
             fgets(name, sizeof(line), file);
         }
         sscanf(line, "Date_complete: %d.%d.%d;", &tm_mday, &tm_mon, &tm_year);
-        if(strlen(name) > 1)
+        if (strlen(name) > 1)
         {
             flag = true;
         }
@@ -567,4 +520,76 @@ void print_complete_tasklist()
     }
     printf("-----------------------------------\n");
     fclose(file);
+}
+
+int main(int argc, char *argv[])
+{
+    if ((strcmp(argv[1], "--help")) == 0 || (strcmp(argv[1], "-h")) == 0)
+    {
+        printf("fjfkkdfs\n");
+        return 0;
+    }
+
+    else if ((strcmp(argv[1], "--create")) == 0 || (strcmp(argv[1], "-c")) == 0)
+    {
+        create_task();
+        return 0;
+    }
+
+    else if ((strcmp(argv[1], "--delete")) == 0 || (strcmp(argv[1], "-d")) == 0)
+    {
+        print_list();
+        delete_task();
+        return 0;
+    }
+
+    else if ((strcmp(argv[1], "--complete")) == 0 || (strcmp(argv[1], "-cmp")) == 0)
+    {
+        print_list();
+        complete_task();
+        return 0;
+    }
+
+    else if ((strcmp(argv[1], "--task")) == 0 || (strcmp(argv[1], "-t")) == 0)
+    {
+        print_list();
+        print_task();
+        return 0;
+    }
+
+    else
+    {
+        int choice;
+        do
+        {
+            print_list();
+            print_menu();
+
+            choice = get_variant(6);
+            switch (choice)
+            {
+            case 1:
+                create_task();
+                break;
+            case 2:
+                print_task();
+                break;
+            case 3:
+                complete_task();
+                break;
+            case 4:
+                delete_task();
+                break;
+            case 5:
+                print_complete_tasklist();
+                break;
+            case 6:
+                exit(0);
+                // default:
+                //     printf("Неверный выбор операции. Попробуйте снова.\n\n");
+            }
+        } while (choice != 6);
+
+        return 0;
+    }
 }
